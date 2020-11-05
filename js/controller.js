@@ -36,8 +36,11 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.stChkEyear = '';
     $scope.showtrainingnum = '';
     var fd = new FormData();
-    $scope.staBtnID = false;
-    $scope.statusID = 'old';//แสดงสถานะว่าใช้ไอดีเก่าหรือใหม่ old = เก่า new = ใหม่
+    $scope.staUserIns = true;//สถานะผู้บันทึกร่วมหรือไม่เข้าร่วม
+    $scope.msgUserIns = 'เข้าร่วม';
+    $scope.staBtnID = true;
+    $scope.msgID = 'รหัสใหม่'
+    $scope.staid = true;//แสดงสถานะว่าใช้ไอดีเก่าหรือใหม่ old = เก่า new = ใหม่
     $scope.showAlertMsg = false;//แสดงคำเตือนกรอกข้อมูลไม่ครบ
     $scope.staMsgID = true;
     $scope.partic = new Array(); // รายชื่อผู้เข้าร่วม
@@ -81,7 +84,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                 number = '0'+(subId+1);
             }
             $scope.training_num = 'NC'+(date.getFullYear()+543)+number;
-            $scope.statusID = 'new';
+
             $scope.staMsgID = false;
             $scope.msgID = 'รหัสใหม่';
             $scope.staBtnID = '';
@@ -97,7 +100,20 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.statusActiveDate = function(){
         $scope.statusDateActive = true;
     }     
-
+    $scope.userIns = function(){
+        if($scope.staUserIns){
+            $scope.msgUserIns = 'เข้าร่วม';
+            //$scope.partic.push($scope.dataPartic[0]);
+        }else{
+            $scope.msgUserIns = 'ไม่เข้าร่วม';
+            /*angular.forEach($scope.partic,function(value,key){
+                if(value.ID_CODE == ){
+                    $scope.partic.splice(key,1);
+                }
+            });*/
+            
+        }
+    }
     $scope.addPartic = function(){
         /*if($scope.partic.length == 0){
             $scope.partic.push($scope.dataPartic[0]); 
@@ -280,7 +296,8 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
         $scope.staAutoCom = true;
     }
     $scope.autoComPre = function(val){
-        
+        console.log(val);
+        console.log($scope.training_code);
         if($scope.training_code=='' || $scope.training_code == undefined){
             tra_code = '';
         }else{
@@ -323,8 +340,10 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                     }
                 });
                 modalOldData.result.then(function(val){
-                    console.log(data.data[0].training_num);
                     if(val == 'selOld'){
+                        $scope.Eyear = data.data[0].Eyear;
+                        $scope.training_code = $scope.selTraining[(data.data[0].training_code)-1];
+                        $scope.EPart = data.data[0].EPart;
                         $scope.showtrainingnum = data.data[0].training_num;
                         $scope.institute_name = data.data[0].institute_name;
                         $scope.edu_institute = data.data[0].edu_institute;
@@ -341,16 +360,16 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                         $scope.fileup = data.data[0].attach_name;
                         $scope.attach_join = data.data[0].attach_join;
                         $scope.fileup = {name:data.data[0].attach_name};
+                        $scope.msgID = 'รหัสเดิม';
+                        $scope.staid = false;
                     }else if(val == 'selNew'){
-                        //GenId();
+                        $scope.msgID = 'รหัสใหม่';
+                        $scope.staid = true;
                         $scope.showtrainingnum = '';
                     }
                 });
             });
             //$scope.staMsgID = false;
-
-          /*  
-            $scope.statusID = 'old';*/
 
             $scope.training_num = val[0].training_num;
             if($scope.training_num === ''){
@@ -361,10 +380,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             GenId();
         }*/
         $scope.staAutoComP = true;
-        if($scope.statusID == 'old'){
-            
-            $scope.staBtnID = true; 
-        }
+
         
     }
     
