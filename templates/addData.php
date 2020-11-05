@@ -146,7 +146,7 @@
                         <button type='button' class='btn btn-success' style='border-radius:0;' ng-click='addPartic()'>เพิ่ม</button>
                     </div>
                 </div>
-                <select class='form-control' multiple style='border-radius:0' ng-model='dataPartic' ng-hide='staAutoComPartic' ng-options='showPartic.fullname for showPartic in dataAutoPartic | filter:sch_name' ng-click='selPartic()'>
+                <select class='form-control' multiple style='border-radius:0' ng-model='dataPartic' ng-hide='staAutoComPartic' ng-options='showPartic.fullname for showPartic in dataAutoPartic' ng-click='selPartic()'>
                 </select>
                 <small class="form-text text-danger">{{msgPartic}}</small>
             </div>
