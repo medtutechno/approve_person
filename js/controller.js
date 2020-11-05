@@ -341,9 +341,27 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                         $scope.fileup = data.data[0].attach_name;
                         $scope.attach_join = data.data[0].attach_join;
                         $scope.fileup = {name:data.data[0].attach_name};
+                        $scope.staid = false; 
+                        $scope.msgID = 'รหัสเดิม';
                     }else if(val == 'selNew'){
                         //GenId();
                         $scope.showtrainingnum = '';
+                        $scope.institute_name = '';
+                        $scope.edu_institute = '';
+                        $scope.type_work_code = '';
+                        $scope.edu_country = '';
+                        $scope.start_date = '';
+                        $scope.end_date = '';
+                        $scope.active_date = '';
+                        $scope.sch_type = '';
+                        $scope.sch_name = '';
+                        $scope.training_cost = '';
+                        $scope.lecturer_hour = '';
+                        $scope.comment = '';
+                        $scope.fileup = '';
+                        $scope.attach_join
+                        $scope.msgID = 'รหัสใหม่';
+                        $scope.staid = true;
                     }
                 });
             });
