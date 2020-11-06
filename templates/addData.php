@@ -1,3 +1,6 @@
+<?
+    session_start();
+?>
 <div class='container mt-3 mb-3'>
     <h3>เพิ่มข้อมูล</h3>
     <hr>
@@ -130,11 +133,11 @@
             </div>
             <div class='col-md-3'>   
                 <label>ผู้บันทึก</label>
-                <input type='text' class='form-control' disabled ng-model='usernumber' style='border-radius:0;' placeholder='Username'>
-            </div>
-            <div class='col-md-3'>   
-                <label>หน่วยงาน</label>
-                <input type='text' class='form-control' placeholder='หน่วยงาน' disabled style='border-radius:0;' ng-model='sect'>
+                
+                <div class="custom-control custom-switch">                
+                    <input type="checkbox" class="custom-control-input" id="customSwitch" ng-model='staUserIns' ng-change='userIns()'>
+                    <label class="custom-control-label" for="customSwitch">{{msgUserIns}}</label>
+                </div>
             </div>
         </div>
         <div class='form-row pt-3 pb-3'>

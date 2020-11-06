@@ -48,6 +48,6 @@
     }
 
     $result = select($sql);
-    closeDB();
+    //closeDB();
     echo json_encode($result);
 ?>
