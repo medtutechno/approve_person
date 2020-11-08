@@ -28,6 +28,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.start_date = new Date();
     $scope.end_date = new Date();
     //$scope.active_date = new Date();
+    console.log($scope.idcode);
     $scope.statusDateSta = false; // เปิด-ปิดแสดงวันที่
     $scope.statusDateEnd = false;
     $scope.statusDateActive =  false;
@@ -44,6 +45,11 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.showAlertMsg = false;//แสดงคำเตือนกรอกข้อมูลไม่ครบ
     $scope.staMsgID = true;
     $scope.partic = new Array(); // รายชื่อผู้เข้าร่วม
+    userIn();
+    console.log($scope.partic.ID_CODE);
+    $scope.idcard = $scope.partic.ID_CODE;
+    
+    console.log($scope.idcard);
     $http.post('php/getData.php',{'type':'typeTrain'}).then(function(data){
         $scope.selTraining = data.data;
     });
@@ -64,7 +70,13 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             return 1;
         }
     }
-    function GenId(){
+    function userIn(){
+        $http.post('php/getData.php',{'type':'idcode'}).then(function(data){ // หาชื่อผู้กรอกเพื่อใส่ partic
+            $scope.partic.push(data.data[0]);
+        });
+    }
+
+    /*function GenId(){
         $http.post('php/getData.php',{
             'type':'genID'
         }).then(function(data){
@@ -90,7 +102,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             $scope.staBtnID = '';
 
         });
-    }
+    }*/
     $scope.statusStartDate = function(){
         $scope.statusDateSta =  true;
     }
@@ -103,9 +115,11 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.userIns = function(){
         if($scope.staUserIns){
             $scope.msgUserIns = 'เข้าร่วม';
+            userIn();
             //$scope.partic.push($scope.dataPartic[0]);
         }else{
             $scope.msgUserIns = 'ไม่เข้าร่วม';
+            delPerson();
             /*angular.forEach($scope.partic,function(value,key){
                 if(value.ID_CODE == ){
                     $scope.partic.splice(key,1);
@@ -114,29 +128,22 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             
         }
     }
-    $scope.addPartic = function(){
-        /*if($scope.partic.length == 0){
-            $scope.partic.push($scope.dataPartic[0]); 
-        }else{
-            angular.forEach($scope.partic,function(value,key){
-                if(value.ID_CODE !== $scope.dataPartic[0].ID_CODE){
-                    $scope.partic.push($scope.dataPartic[0]);
-                }else{
-                    $scope.msgPartic = 'ไม่สามารถเพิ่มข้อมูลได้ เนื่องจากข้อมูลซ้ำ';
-                }
-                
-            });
-        }*/
-        $scope.partic.push($scope.dataPartic[0]);
-        $scope.name = '';
-    }
-    $scope.delPartic = function(val){
+    //------------------------------------- ผู้เข้าร่วม ------------------------------------------
+    function delPerson(val){
         angular.forEach($scope.partic,function(value,key){
             if(value.ID_CODE == val){
                 $scope.partic.splice(key,1);
             }
         });
     }
+    $scope.addPartic = function(){
+        $scope.partic.push($scope.dataPartic[0]);
+        $scope.name = '';
+    }
+    $scope.delPartic = function(val){
+        delPerson(val);
+    }
+
     $scope.genID = function(val){
         if(val){
             $scope.msgID = 'รหัสใหม่'; 

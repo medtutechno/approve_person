@@ -1,3 +1,9 @@
+<?
+    session_start();
+    echo $_SESSION['_IDCARD'];
+    echo $_SESSION['_LOGIN'];
+	echo $_SESSION['_USER'];
+?>
 <div class='container mt-3 mb-3'>
     <h3>เพิ่มข้อมูล</h3>
     <hr>
