@@ -39,7 +39,8 @@
     $comment = $_POST['comment'];
     $attach_join = $_POST['attach_join'];
     $tmp_file = $_FILES['file']['tmp_name'];
-    echo $partic = $_POST['partic'];
+    print_r($partic);
+    echo $partic[1];
     $path ='attach_file/';
     if(move_uploaded_file($tmp_file,'../../major_info/attach_file/'.$training_num.'.pdf')){
         if($training_num == ''){
@@ -110,5 +111,5 @@
             'lecturer_hour'=>$lecturer_hour
         );
     }
-    echo json_encode($value);
+   // echo json_encode($value);
 ?>

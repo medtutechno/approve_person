@@ -208,7 +208,9 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                 formAdd.append('lecturer_hour',$scope.lecturer_hour);
                                                                 formAdd.append('comment',$scope.comment);
                                                                 formAdd.append('attach_join',$scope.attach_join);
-                                                                formAdd.append('partic',$scope.partic);
+                                                                // loop
+                                                                formAdd.append('partic[]',$scope.partic);
+                                                                //---
                                                                 formAdd.append('file',$scope.fileup);
                                                                 $http.post('php/insertData.php',formAdd,{
                                                                     transformRequest: angular.identity,
