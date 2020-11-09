@@ -1,5 +1,11 @@
 <?
     session_start();
+<<<<<<< HEAD
+=======
+    echo $_SESSION['_IDCARD'];
+    echo $_SESSION['_LOGIN'];
+	echo $_SESSION['_USER'];
+>>>>>>> a42794d029d4ee0508638628f04ace5c1211cd4f
 ?>
 <div class='container mt-3 mb-3'>
     <h3>เพิ่มข้อมูล</h3>

@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require '../../../php/connect.php';
     $data = json_decode(file_get_contents("php://input"));
     $con=connect('localhost','root','medadmin','personal','utf8');
@@ -9,7 +10,9 @@
     $prename = $data->prename;
     $typefund = $data->datafund;
     $name = $data->name;
-    if($type == 'typeTrain'){
+    if($type === 'idcode'){
+        $sql = 'SELECT CONCAT(TFNAME," ",TLNAME)AS fullname,ID_CODE FROM appm_personnel WHERE ID_CODE = "'.$_SESSION['_IDCARD'].'"';
+    }else if($type == 'typeTrain'){
         $sql = 'SELECT training_code,detail_training FROM type_training';   
     }else if($type == 'typeInsti'){
         $sql = 'SELECT * FROM type_work';
