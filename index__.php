@@ -225,12 +225,12 @@
                         .removeAttr('selected')
                         .filter('[val=' + res['type_work_code'] + ']')
                         .attr('selected', true);
+                    $('#cancel_status').val(res['cancel_status']);
                 }
             })
         })
 
         $("#form_edit").validate({
-
             // if has rule put code in here
 
             // rules: {
@@ -264,6 +264,7 @@
                             'TRAINING_COST': $('[name = TRAINING_COST]').val(),
                             'lecturer_hour': $('[name = lecturer_hour]').val(),
                             'com_name': $('[name = com_name]').val(),
+                            'cancel_status': $('[name = cancel_status]').val()
                         }
                         console.log(data);
                         $.ajax({
