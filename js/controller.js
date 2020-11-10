@@ -191,6 +191,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                 $scope.showAlertMsg = false;
                                                                 // check ข้อมูลครบหมด
                                                                 var formAdd = new FormData();
+                                                                formAdd.append('id',$scope.ID);
                                                                 formAdd.append('training_num',$scope.showtrainingnum);
                                                                 formAdd.append('training_code',$scope.training_code.training_code);
                                                                 formAdd.append('Eyear',$scope.Eyear);
@@ -208,9 +209,9 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                 formAdd.append('lecturer_hour',$scope.lecturer_hour);
                                                                 formAdd.append('comment',$scope.comment);
                                                                 formAdd.append('attach_join',$scope.attach_join);
-                                                                // loop
-                                                                formAdd.append('partic[]',$scope.partic);
-                                                                //---
+                                                                angular.forEach($scope.partic,function(value,key){
+                                                                    formAdd.append('partic[]',value.ID_CODE);
+                                                                });
                                                                 formAdd.append('file',$scope.fileup);
                                                                 $http.post('php/insertData.php',formAdd,{
                                                                     transformRequest: angular.identity,
@@ -350,6 +351,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                 });
                 modalOldData.result.then(function(val){
                     if(val == 'selOld'){
+                        $scope.ID = data.data[0].ID;
                         $scope.Eyear = data.data[0].Eyear;
                         $scope.training_code = $scope.selTraining[(data.data[0].training_code)-1];
                         $scope.EPart = data.data[0].EPart;
@@ -369,8 +371,11 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                         $scope.fileup = data.data[0].attach_name;
                         $scope.attach_join = data.data[0].attach_join;
                         $scope.fileup = {name:data.data[0].attach_name};
-                        $scope.staid = false; 
-                        $scope.msgID = 'รหัสเดิม';
+                        console.log(data.data[0].training_num);
+                        if(data.data[0].training_num != ' '){
+                            $scope.staid = false; 
+                            $scope.msgID = 'รหัสเดิม';
+                        }
                     }else if(val == 'selNew'){
                         $scope.msgID = 'รหัสใหม่';
                         $scope.staid = true;
@@ -396,8 +401,9 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             });
             //$scope.staMsgID = false;
 
-            $scope.training_num = val[0].training_num;
-            if($scope.training_num === ''){
+            //$scope.showtrainingnum = val[0].training_num;
+            console.log($scope.showtrainingnum);
+            if($scope.showtrainingnum == ''){
                 $scope.msgID = 'รหัสใหม่';
                 $scope.staid = true;
             }

@@ -22,11 +22,11 @@
         $sql = 'SELECT SCH_CODE,SCH_TNAME FROM appm_scholarship_type WHERE SCH_TNAME LIKE "%'.$typefund.'%"';
     }else if($type == 'pre'){
        // echo $prename;
-        if($Eyear !== '' && $trai_code !== ''){
+        if($Eyear != '' && $trai_code != ''){
             $sql = 'SELECT training_num,present_name FROM training_all WHERE Eyear = "'.$Eyear.'" AND training_code = "'.$trai_code.'" AND present_name LIKE "%'.$prename.'%" ORDER BY Eyear DESC LIMIT 0,1000';
-        }else if($Eyear !== '' && $trai_code == ''){
+        }else if($Eyear != '' && $trai_code == ''){
             $sql = 'SELECT training_num,present_name FROM training_all WHERE Eyear = "'.$Eyear.'" AND present_name LIKE "%'.$prename.'%" ORDER BY Eyear DESC LIMIT 0,1000';
-        }else if($Eyear == '' && $trai_code !== ''){
+        }else if($Eyear == '' && $trai_code != ''){
             $sql = 'SELECT training_num,present_name FROM training_all WHERE training_code = "'.$trai_code.'" AND present_name LIKE "%'.$prename.'%" ORDER BY Eyear DESC LIMIT 0,1000';
         }else{
             $sql = 'SELECT training_num,present_name FROM training_all WHERE present_name LIKE "%'.$prename.'%" ORDER BY Eyear DESC LIMIT 0,1000';
