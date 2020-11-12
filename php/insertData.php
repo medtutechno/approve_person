@@ -51,7 +51,7 @@
             'attach_name'=>$training_num.'.pdf',
             'attach_Npath'=>$path.$training_num.'.pdf'
         );
-        if(isset($attach_join)){
+        if(empty($attach_join)){
            // insert('responsibilities.attach_file',$value);
             $sql = 'SELECT MAX(attach_id) as attachid FROM responsibilities.attach_file LIMIT 0,1';
             $result  = select($sql);
@@ -62,7 +62,7 @@
         }
 
     }
-    if(isset($training_num)){ //เช็ครหัสเรื่องและสร้าง
+    if(empty($training_num)){ //เช็ครหัสเรื่องและสร้าง
         $training_num = genID();
     }
 
@@ -107,7 +107,7 @@
         'date_recode' => date('Y-m-d'), 
         'lecturer_hour'=>$lecturer_hour
     );
-    if(isset($id)){
+    if(empty($id)){
         //insert('training_all',$value);
     }else{
         $where = 'ID = "'.$id.'"';
@@ -115,5 +115,12 @@
     }
     $sql = 'SELECT ID FROM training_all WHERE training_num ="'.$training_num.'"';
     $result = select($sql);
-    echo json_encode($value);
+    echo $result[0][ID];
+    foreach($partic as $key=>$value){
+        echo $value.' : ';
+        $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
+        if($con->query($sql)) { return true; }
+	    else { die("SQL Error: <br>".$sql."<br>".$con->error); return false; }
+    }
+    //echo json_encode($value);
 ?>
