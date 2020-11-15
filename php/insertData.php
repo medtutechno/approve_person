@@ -52,13 +52,13 @@
             'attach_Npath'=>$path.$training_num.'.pdf'
         );
         if(empty($attach_join)){
-           // insert('responsibilities.attach_file',$value);
+           insert('responsibilities.attach_file',$value);
             $sql = 'SELECT MAX(attach_id) as attachid FROM responsibilities.attach_file LIMIT 0,1';
             $result  = select($sql);
             $attach_join = $result[0][attachid];
         }else{
             $where = 'atttach_id ="'.$attach_join.'"';
-           // update('responsibilities.attach_file',$value,$where);
+           update('responsibilities.attach_file',$value,$where);
         }
 
     }
@@ -108,19 +108,22 @@
         'lecturer_hour'=>$lecturer_hour
     );
     if(empty($id)){
-        //insert('training_all',$value);
+        insert('training_all',$value);
     }else{
         $where = 'ID = "'.$id.'"';
-        // update('training_all',$value,$where);
+        update('training_all',$value,$where);
     }
     $sql = 'SELECT ID FROM training_all WHERE training_num ="'.$training_num.'"';
     $result = select($sql);
-    echo $result[0][ID];
+
     foreach($partic as $key=>$value){
-        echo $value.' : ';
-        $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
-        if($con->query($sql)) { return true; }
-	    else { die("SQL Error: <br>".$sql."<br>".$con->error); return false; }
+        echo $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
+        if($con->query($sql)){ 
+            echo $value;
+        }
+	    else{ 
+            die("SQL Error: <br>".$sql."<br>".$con->error); return false; 
+        }
     }
     //echo json_encode($value);
 ?>
