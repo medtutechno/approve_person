@@ -1,8 +1,11 @@
 <?php
     session_start();
+    if(!isset($_SESSION['_IDCARD'])){
+        header('Location: http://'.$_SERVER['SERVER_NAME'].'/main');
+    }
     require '../../../php/connect.php';
     $data = json_decode(file_get_contents("php://input"));
-    $con=connect('localhost','root','medadmin','personal','utf8');
+    $con=connect('192.168.66.67','root','medadmin','personal','utf8');
     $type = $data->type;
     $Eyear = $data->Eyear;
     $trai_code = $data->training_code;
@@ -10,7 +13,7 @@
     $prename = $data->prename;
     $typefund = $data->datafund;
     $name = $data->name;
-    if($type === 'idcode'){
+    if($type == 'idcode'){
         $sql = 'SELECT CONCAT(TFNAME," ",TLNAME)AS fullname,ID_CODE FROM appm_personnel WHERE ID_CODE = "'.$_SESSION['_IDCARD'].'"';
     }else if($type == 'typeTrain'){
         $sql = 'SELECT training_code,detail_training FROM type_training';   
@@ -44,13 +47,27 @@
         LEFT JOIN responsibilities.attach_file ON responsibilities.attach_file.attach_id =personal.training_all.attach_join
         LEFT JOIN personal.appm_school ON personal.appm_school.SCHOOL_CODE = personal.training_all.edu_institute 
         WHERE personal.training_all.training_num = "'.$idTra.'" AND personal.training_all.present_name = "'.$prename.'" LIMIT 0,1';
-    }else if($type === 'dataName'){
+    }else if($type == 'dataName'){
         $sql = 'SELECT CONCAT(pa.TFNAME," ",pa.TLNAME) AS fullname,pa.ID_CODE
         FROM personal.appm_personnel AS pa
         WHERE pa.ID_CODE <> " " AND CONCAT(pa.TFNAME," ",pa.TLNAME) LIKE "%'.$name.'%"';
     }
-
-    $result = select($sql);
-    //closeDB();
+    if($type == 'premission'){
+        $con->close();
+        $con=connect('192.168.66.1','root','medadmin','menu_handle','utf8');
+        $sql = 'SELECT *
+        FROM active_menu 
+        WHERE active_menu.active_authorise_id = "'.$_SESSION['_IDCARD'].'" AND active_menu.active_mhd_id = "196"';
+        $permission = select($sql);
+        if($permission[0][active_report] && $permission[0][active_write]){
+            $_SESSION['status_system'] = 'admin';
+        }else{
+            $_SESSION['status_system'] = 'user';
+        }
+    }else{
+        $result = select($sql);
+    }
+    
+    $con->close();
     echo json_encode($result);
 ?>

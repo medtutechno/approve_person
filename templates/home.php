@@ -1,4 +1,4 @@
-<div class='row'>
+<!--<div class='row'>
     <div class='col-md-4 mt-3'>
         <div class='card text-light bg-secondary' style='border:none;border-radius:0;'>
             <div class='card-body'>
@@ -23,7 +23,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 <!--<div class='row mt-3'>
     <div class='col-md-2 offset-md-10'>
         <button class='btn btn-outline-info float-right' style='border-radius:0' ng-click='modelAdd()'>เพิ่มข้อมูล</button>
@@ -33,8 +33,8 @@
     <thead>
         <tr>
             <th>รหัสเรื่อง</th>
-            <th>ชื่อเรื่อง</th>
-            <th>ผู้จัด</th>
+            <th class='text-center'>ชื่อเรื่อง</th>
+            <th class='text-center'>ผู้จัด</th>
             <th>วันที่ไป</th>
             <th>สถานะ</th>
             <th>รายละเอียด</th>
@@ -46,7 +46,7 @@
             <td>เดินทางไปดูสถานที่ประกอบการพิจารณาในการจัดโครงการค่ายบำเพ็ญประโยชน์และอาสาพัฒนาชนบท</td>
             <td>งานกิจการนักศึกษา คณะแพทยศาสตร์ มธ.</td>
             <td>24 พ.ย.62-24 พ.ย.62</td>
-            <td><span class='badge badge-success' style='border-radius:0'>อนุมัติ</span></td>
+            <td><h5><span class='badge badge-success' style='border-radius:0;font-weight:none;'>อนุมัติ</span></h5></td>
             <td></td>
         </tr>
     </tbody>

@@ -1,4 +1,14 @@
-app.controller('homePage',function($scope,$http,$uibModal){
+app.controller('menuPage',function($scope,$http,datauser){
+    $http.post('php/getData.php',{'type':'idcode'}).then(function(data){
+        datauser.fullname = data.data[0].fullname;
+        $scope.fullname = data.data[0].fullname;
+    });
+    $http.post('php/getData.php',{'type':'premission'}).then(function(data){
+        console.log(data.data);
+    });
+});
+app.controller('homePage',function($scope,$http,$uibModal,datauser){
+
 //----------------------- Modal Add --------------------------------    
     $scope.modelAdd = function(user,sect){
         console.log('ee');
@@ -186,7 +196,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                 if($scope.stNumHour !== 'is-invalid'){
                                                     if($scope.staFile !== 'is-invalid'){
                                                         if($scope.staPartic !== 'is-invalid'){
-                                                            if($scope.fileup.type == 'application/pdf'){
+                                                            if($scope.fileup.type == 'application/pdf' || $scope.fileup.name != ''){
                                                                 $scope.msgFile ='';
                                                                 $scope.showAlertMsg = false;
                                                                 // check ข้อมูลครบหมด

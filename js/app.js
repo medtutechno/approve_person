@@ -2,7 +2,7 @@ var app=angular.module('app',['ngRoute','ui.bootstrap','ngSanitize']);
 app.config(function($routeProvider,$locationProvider){
 	$routeProvider
 	.when('/',{
-        templateUrl:'templates/home.php',
+        templateUrl:'first.php',
         controller:'homePage'
     })
     .when('/add',{
@@ -15,6 +15,9 @@ app.config(function($routeProvider,$locationProvider){
 	})
 	.otherwise({redirectTo: '/'});
 	$locationProvider.hashPrefix('');
+});
+app.service('datauser',function(){
+    this.fullname = '';
 });
 app.service('autoComplete',function(){
     this.autoCom = function(val){

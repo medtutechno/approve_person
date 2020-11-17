@@ -1,7 +1,10 @@
 <?php
     session_start();    
+    if(!isset($_SESSION['_IDCARD'])){
+        header('Location: http://'.$_SERVER['SERVER_NAME'].'/main');
+    }
     require '../../../php/connect.php';
-    $con = connect('localhost','root','medadmin','personal','utf8');
+    $con = connect('192.168.66.67','root','medadmin','personal','utf8');
     
     $data = json_decode(file_get_contents("php://input"));
 
@@ -29,42 +32,44 @@
         $sql = 'SELECT MAX(training_num) as lastId FROM training_all WHERE training_num LIKE "nc%" LIMIT 0,1';
         $result = select($sql);
         //NC2563xxxx
-        $yearID = substr($result[0][lastId],3,4);//ตัดปีจาก ID
+        $yearID = substr($result[0][lastId],2,4);//ตัดปีจาก ID
         $numberID = intval(substr($result[0][lastId],6,4));// ตัดเลข ID 
-        if($result[0][lastId] === '' || $yearID !== (date('Y')+543)){ //เช็คปีของ ID เพื่อสร้าง ID ใหม๋
-            return $training_num = 'NC'.(date('Y')+543).'0001';
+        if($yearID != (date('Y')+543) || $result[0][lastId] == ''){//เช็คปีของ ID เพื่อสร้าง ID ใหม๋      
+                return $training_num = 'NC'.(date('Y')+543).'0001';
         }else{
-            if($numberID < 10){
-                $number = '000'+($numberID+1);
+            if($numberID < 10){            
+                $number = '000'.($numberID+1);
             }else if($numberID < 100){
-                $number = '00'+($numberID+1);
+                $number = '00'.($numberID+1);
             }else if($numberID < 1000){
-                $number = '0'+($numberID+1);
-            }else{
+                $number = '0'.($numberID+1);
+            }else{ echo 'd';
                 $number = $numberID+1;
             }
             return $training_num = 'NC'.$yearID.$number;
         } 
     }
+    if(empty($training_num)){ //เช็ครหัสเรื่องและสร้าง
+       echo $training_num = genID();
+    }
+    print_r($_FILES['file']['name']);
+    
+    $value = array(
+        'attach_name'=>$training_num.'.pdf',
+        'attach_Npath'=>$path.$training_num.'.pdf'
+    );
     if(move_uploaded_file($tmp_file,'../../major_info/attach_file/'.$training_num.'.pdf')){
-        $value = array(
-            'attach_name'=>$training_num.'.pdf',
-            'attach_Npath'=>$path.$training_num.'.pdf'
-        );
         if(empty($attach_join)){
-           insert('responsibilities.attach_file',$value);
+            insert('responsibilities.attach_file',$value);
             $sql = 'SELECT MAX(attach_id) as attachid FROM responsibilities.attach_file LIMIT 0,1';
             $result  = select($sql);
             $attach_join = $result[0][attachid];
         }else{
-            $where = 'atttach_id ="'.$attach_join.'"';
-           update('responsibilities.attach_file',$value,$where);
-        }
+                $where = 'attach_id ="'.$attach_join.'"';
+                update('responsibilities.attach_file',$value,$where); 
+            }
+    }
 
-    }
-    if(empty($training_num)){ //เช็ครหัสเรื่องและสร้าง
-        $training_num = genID();
-    }
 
 
     //---------- หา Gtraining_code ------------------------------
@@ -107,7 +112,7 @@
         'date_recode' => date('Y-m-d'), 
         'lecturer_hour'=>$lecturer_hour
     );
-    if(empty($id)){
+    /*if(empty($id)){
         insert('training_all',$value);
     }else{
         $where = 'ID = "'.$id.'"';
@@ -124,6 +129,6 @@
 	    else{ 
             die("SQL Error: <br>".$sql."<br>".$con->error); return false; 
         }
-    }
+    }*/
     //echo json_encode($value);
 ?>

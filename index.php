@@ -1,6 +1,8 @@
 <?php
   session_start();
-  $_session['user'] = 'รศ.พ สมคิด นามสมมุติ';
+  if(!isset($_SESSION['_IDCARD'])){
+    header('Location: http://'.$_SERVER['SERVER_NAME'].'/main');
+  }
 ?>
 <!doctype html>
 <html lang="en">
@@ -14,7 +16,7 @@
     <link rel='stylesheet' href='css/style.css'>
   </head>
   <body ng-app='app'>
-    <nav class='navbar navbar-expand-lg navbar-light bg-white border-bottom'>
+    <nav class='navbar navbar-expand-lg navbar-light bg-white border-bottom' ng-controller='menuPage'>
       <a class='navbar-brand' href='#'>
         <img src='logomedtu.png' style='height:30px;'>
         ระบบขออนุมัติตัวบุคคล
@@ -32,13 +34,11 @@
             <a href='#/add' class='nav-link'> เพิ่มข้อมูล</a>
           </li>
           <li class='nav-item'>
-            <a href='#' class='nav-link'> ออกจากระบบ</a>
+            <a href='http://203.131.209.137/main' class='nav-link'> กลับสู่เมนูหลัก</a>
           </li>
         </ul>
         <span class='navbar-text text-uppercase border-left pl-3 text-success'>
-          <?php
-            echo $_session['user'];
-          ?>
+        {{fullname}}
         </span>
       </div>
     </nav>
@@ -57,6 +57,12 @@
     <script src='../../js/angular-route.min.js'></script>
     <script src='../../js/angular-sanitize.min.js'></script>
     <script src='../../js/ui-bootstrap-3.0.6.min.js'></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.js"></script>
+    <script src="js/alertify.min.js"></script>
     <script src="js/app.js"></script>
     <script src='js/controller.js'></script>
   </body>
