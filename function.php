@@ -3,7 +3,7 @@
     if(!isset($_SESSION['_IDCARD'])){
         header('Location: http://'.$_SERVER['SERVER_NAME'].'/main');
     }
-    define('DB_SERVER','192.168.66.67');
+    define('DB_SERVER','localhost');
     define('DB_USER','root');
     define('DB_PASS','medadmin');
     define('DB_NAME','personal');
@@ -69,6 +69,10 @@
             $sql = ("UPDATE $table SET $modifs WHERE $where");
             if($this->dbcon->query($sql)) { return true; }
             else { die("SQL Error: <br>".$sql."<br>".$this->dbcon->error); return false; }
+        }
+        public function search_alldata(){
+            $search = mysqli_query($this->dbcon, "SELECT * FROM `$topic`");
+            return $search;
         }
     }
 ?>

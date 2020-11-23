@@ -27,9 +27,49 @@
 </head>
 
 <body>  
-    <nav class='nav'>
-        <a class='nav-link' href='#'></a>
-    </nav>
+<div class='row'>
+
+    <div class='col-md-4 mt-3'>
+        <div class='card rounded-0' style='border-left:10px solid #6E6E6E;'>
+            <div class='card-body'>
+                <h5 class='card-title'>รอการอนุมัติ</h5>
+                <h6 class='card-subtitle'>{{countWait}} รายการ</h6>
+            </div>
+        </div>
+        
+    </div>
+    <div class='col-md-4 mt-3'>
+        <div class='card rounded-0' style='border-left:10px solid #2ECCFA;'>
+            <div class='card-body'>
+                <h5 class='card-title'>ขอยกเลิก</h5>
+                <h6 class='card-subtitle'>{{countcancel}} รายการ</h6>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-4 mt-3'>
+        <div class='card rounded-0' style='border-left:10px solid #FF5757;'>
+            <div class='card-body'>
+                <h5 class='card-title'>ไม่อนุมัติ</h5>
+                <h6 class='card-subtitle'>{{countDis}} รายการ</h6>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='row'>
+    <div class='col-md-4 mt-3'>
+                <form class='form-inline'>
+                    <select class='form-control form-control-sm rounded-0'>
+                        <option value='id_train'>รหัสเรื่อง</option>
+                        <option value=''>ชื่อเรื่อง</option>
+                        <option value=''>ชื่อผู้ขออนุมัติ</option>
+                    </select>
+                    <input type='text' placeholder='ค้นหา' class='form-control rounded-0 form-control-sm'>
+                    <button type='button' class='btn btn-info rounded-0 btn-sm'><i class=" fa fa-search"></i></button>
+ 
+                </form>
+
+    </div>
+</div>
         <hr>
         <table class="table table-bordered border mt-3" id="table_show">
             <thead class="table-secondary">
@@ -94,7 +134,7 @@
             "pagingType": "full_numbers",
             "bLengthChange": false,
             "ordering": true, // Allows ordering
-            "searching": true, // Searchbox
+            "searching": false, // Searchbox
             "paging": true, // Pagination
             "bInfo": false, // Shows 'Showing X of X' information
             "pageLength": 10, // Defaults number of rows to display in table

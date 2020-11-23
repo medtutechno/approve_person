@@ -5,7 +5,7 @@
     }
     require '../../../php/connect.php';
     $data = json_decode(file_get_contents("php://input"));
-    $con=connect('192.168.66.67','root','medadmin','personal','utf8');
+    $con=connect('localhost','root','medadmin','personal','utf8');
     $type = $data->type;
     $Eyear = $data->Eyear;
     $trai_code = $data->training_code;
@@ -51,10 +51,14 @@
         $sql = 'SELECT CONCAT(pa.TFNAME," ",pa.TLNAME) AS fullname,pa.ID_CODE
         FROM personal.appm_personnel AS pa
         WHERE pa.ID_CODE <> " " AND CONCAT(pa.TFNAME," ",pa.TLNAME) LIKE "%'.$name.'%"';
+    }else if($type == 'status_training'){
+        $sql ='SELECT cancel_status
+        FROM training_all
+        WHERE cancel_status <> "1"';
     }
     if($type == 'premission'){
         $con->close();
-        $con=connect('192.168.66.1','root','medadmin','menu_handle','utf8');
+        $con=connect('localhost','root','medadmin','menu_handle','utf8');
         $sql = 'SELECT *
         FROM active_menu 
         WHERE active_menu.active_authorise_id = "'.$_SESSION['_IDCARD'].'" AND active_menu.active_mhd_id = "196"';

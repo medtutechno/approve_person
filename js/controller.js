@@ -10,7 +10,7 @@ app.controller('menuPage',function($scope,$http,datauser){
 app.controller('homePage',function($scope,$http,$uibModal,datauser){
 
 //----------------------- Modal Add --------------------------------    
-    $scope.modelAdd = function(user,sect){
+    /*$scope.modelAdd = function(user,sect){
         console.log('ee');
         $scope.user = user;
         $uibModal.open({
@@ -25,7 +25,23 @@ app.controller('homePage',function($scope,$http,$uibModal,datauser){
                 }
             }
         });
-    }
+    }*/
+    $http.post('php/getData.php',{'type':'status_training'}).then(function(data){
+        $scope.countWait = 0;//จำนวนที่รออนุมัติ
+        $scope.countcancel = 0;//จำนวนที่ขอยกเลิก
+        $scope.countDis = 0;//จำนวนที่ไม่อนุมัติ
+        angular.forEach(data.data,function(val,key){
+            switch(val.cancel_status){
+                case '0' : $scope.countWait++;
+                break;
+                case '2' : $scope.countcancel++;
+                break;
+                case '3' : $scope.countDis++;
+                break;
+            }
+        });
+        
+    });
 });
 
 app.controller('modalCtrlInsert',function($uibModalInstance,$scope,userDetail,$http){
