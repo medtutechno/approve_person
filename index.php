@@ -18,7 +18,7 @@
   <body ng-app='app'>
     <nav class='navbar navbar-expand-lg navbar-light bg-white border-bottom' ng-controller='menuPage'>
       <a class='navbar-brand' href='#'>
-        <img src='logomedtu.png' style='height:30px;'>
+        <img src='../../logo/Med_TU_Logo_Thai.png' style='height:30px;'>
         ระบบขออนุมัติตัวบุคคล
       </a>
 
