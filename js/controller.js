@@ -46,7 +46,8 @@ app.controller('homePage',function($scope,$http,$uibModal,datauser){
     });
 });
 
-app.controller('modalCtrlInsert',function($uibModalInstance,$scope,userDetail,$http){
+app.controller('modalCtrlInsert',function($uibModalInstance,$scope,$http,userDetail){
+    console.log(userDetail);
     $scope.modalClose = function(){
         $uibModalInstance.dismiss('cancel');
     }
@@ -135,16 +136,16 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
         //console.log($scope.start_date);
         var yearCurrent = new Date();
         var lastnum = val.length;
-       console.log(yearCurrent.getFullYear());
-       console.log(val.substr(2,lastnum));
         if(event.keyCode != 8){
             if(val.length == 2 || val.length == 5){
-                var day = val.substr(0,2);
+                /*var day = val.substr(0,2);
                 if(val.substr(0,2)>31){
                     day = parseInt('31')+val.substr(2,lastnum);
-                }
+                }*/
                 if(sta=='start'){
                     $scope.start_date = val+'-';
+                }else if(sta=='end'){
+                    $scope.end_date = val+'-';
                 }
             }
         }
@@ -206,7 +207,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.btnAddData = function(){
         //========================== Check Data    ============================
         var chkAns = 0;
-        $scope.stChkEyear = chkSendData($scope.Eyear);  
+       /* $scope.stChkEyear = chkSendData($scope.Eyear);  
         $scope.stChkEPart = chkSendData($scope.EPart);
         $scope.stChktriCode = chkSendData($scope.training_code); 
         $scope.stChkTo = chkSendData($scope.institute_name);
@@ -216,9 +217,9 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
         $scope.stChkShowCountry = chkSendData($scope.edu_country);
         $scope.stChkActDate = chkSendData($scope.active_date);
         $scope.stChkFund = chkSendData($scope.sch_name);
-        $scope.stNumHour = chkSendData($scope.lecturer_hour);
+        $scope.stNumHour = chkSendData($scope.lecturer_hour);*/
         $scope.staFile = chkSendData($scope.fileup);
-        $scope.staPartic = chkSendData($scope.partic);
+        //$scope.staPartic = chkSendData($scope.partic);
         //$scope.training_num = $scope.showtrainingnum;
         /*if($scope.stChkEyear !== 'is-invalid'){
             if($scope.stChkEPart !== 'is-invalid'){
@@ -237,18 +238,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                 $scope.msgFile ='';
                                                                 $scope.showAlertMsg = false;
                                                                 // check ข้อมูลครบหมด
-                                                                $uibModal.open({
-                                                                    animation: true,
-                                                                    templateUrl:'modalAdd.html',
-                                                                    controller:'modalCtrlInsert',
-                                                                    backdrop:'static',
-                                                                    size:'lg',
-                                                                    resolve:{
-                                                                        userDetail : function(){
-                                                                            return [user,sect];
-                                                                        }
-                                                                    }
-                                                                });
+                                                                
                                                                 var formAdd = new FormData();
                                                                 formAdd.append('id',$scope.ID);
                                                                 formAdd.append('training_num',$scope.showtrainingnum);
@@ -272,7 +262,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                     formAdd.append('partic[]',value.ID_CODE);
                                                                 });
                                                                 formAdd.append('file',$scope.fileup);
-                                                                $http.post('php/insertData.php',formAdd,{
+                                                                /*$http.post('php/insertData.php',formAdd,{
                                                                     transformRequest: angular.identity,
                                                                     headers: {'Content-Type': undefined}
                                                                 })
@@ -281,6 +271,19 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                     if(data.data == '1'){
                                                                         $scope.staDetailLoading = false; 
                                                                         
+                                                                    }
+                                                                });*/
+                                                                console.log(formAdd);
+                                                                $uibModal.open({
+                                                                    animation: true,
+                                                                    templateUrl:'modalLoadSaveData.html',
+                                                                    controller:'modalCtrlSaveData',
+                                                                    backdrop:'static',
+                                                                    size:'lg',
+                                                                    resolve:{
+                                                                        alldata : function(){
+                                                                            return formAdd;
+                                                                        }
                                                                     }
                                                                 });
                                                             }else{
@@ -402,7 +405,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                     templateUrl:'modalIDOld.html',
                     controller:'modalCtrlIDOld',
                     backdrop:'static',
-                    size:'lg',
+                    size:'sm',
                     resolve:{
                         idtra : function(){
                             return alldata;
@@ -525,12 +528,13 @@ app.controller('modalCtrlIDOld',function($uibModalInstance,$scope,idtra,$http){
 });
 
 app.controller('modalCtrlSaveData',function($uibModalInstance,$scope,alldata,$http){
-    $scope.staDetailLoading = true; 
+    $scope.staDetailLoading = true;
+    //console.log(alldata); 
     //console.log(alldata[0].fileup);
     $http.post('php/insertData.php',alldata)
     .then(function(data){
         console.log(data.data);
-        if(data.data ==1){
+        if(data.data == 1){
             $scope.staDetailLoading = false; 
         }
     });

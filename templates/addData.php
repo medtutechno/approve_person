@@ -68,16 +68,16 @@
             <div class='col-md-2 p-1'>
                 <label>วันที่เริ่มต้น</label>
                 <div class='input-group'>
-                    <input type='text' class='form-control rounded-0' placeholder='วัน-เดือน-ปี' ng-model='start_date' ng-keydown='chkdate($event,"start",start_date)'>                
+                    <input type='text' class='form-control rounded-0' placeholder='วัน-เดือน-ปี' ng-model='start_date' ng-keydown='chkdate($event,"start",start_date)' maxlength ='10'>                
                 </div>
-                <small class='text-danger'>ตัวอย่าง 31-12-2020</small>
+                <small class='text-danger'>ตัวอย่าง dd-mm-yyyy(ค.ศ)</small>
             </div>
             <div class='col-md-2 p-1'>
                 <label>วันที่สิ้นสุด</label>
                 <div class='input-group'>
-                    <input type='text' class='form-control rounded-0' placeholder='วัน-เดือน-ปี' ng-model='end_date'>
+                    <input type='text' class='form-control rounded-0' placeholder='วัน-เดือน-ปี' ng-model='end_date' ng-keydown='chkdate($event,"end",end_date)' maxlength ='10'>
                 </div>
-                <small class='text-danger'>ตัวอย่าง 31-12-2020</small>
+                <small class='text-danger'>ตัวอย่าง dd-mm-yyyy(ค.ศ)</small>
             </div>
             <div class='col-md-2 p-1'>
                 <label>วันที่อบรม</label>

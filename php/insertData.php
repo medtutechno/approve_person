@@ -50,7 +50,7 @@
         } 
     }
     if(empty($training_num)){ //เช็ครหัสเรื่องและสร้าง
-       echo $training_num = genID();
+        $training_num = genID();
     }
     print_r($_FILES['file']['name']);
     
@@ -120,7 +120,7 @@
     }
     $sql = 'SELECT ID FROM training_all WHERE training_num ="'.$training_num.'"';
     $result = select($sql);
-
+echo $partic;
     foreach($partic as $key=>$value){
         $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
         if($con->query($sql)){ 
