@@ -91,7 +91,7 @@
                         <label for="com_name">หมายเหตุ</label>
                         <textarea rows="4" class="form-control form-control-sm" name="com_name"></textarea>
                     </div>
-                    <?if($_SESSION['active_status'] == 'admin'){?>
+                    <?if($_SESSION['status_system']=='admin' || isset($_SESSION['head_section'])){?>
                     <div class="mb-3 row">
                         <div class="col-6">
                             <label for="cancel_status"></label>

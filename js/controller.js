@@ -3,7 +3,9 @@ app.controller('menuPage',function($scope,$http,datauser){
         datauser.fullname = data.data[0].fullname;
         $scope.fullname = data.data[0].fullname;
     });
-    $http.post('php/getData.php',{'type':'premission'}).then(function(data){
+    $http.post('php/getData.php',{'type':'premission'}).then(function(data){});
+    $http.post('php/getData.php',{'type':'getdata'}).then(function(data){
+        $scope.showdata = data.data;
         console.log(data.data);
     });
 });
@@ -51,8 +53,8 @@ app.controller('modalCtrlInsert',function($uibModalInstance,$scope,userDetail,$h
 });
 //=============================== Controller addPage.php ===============================
 app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
-    $scope.start_date = new Date();
-    $scope.end_date = new Date();
+    //$scope.start_date = new Date();
+    //$scope.end_date = new Date();
     //$scope.active_date = new Date();
     console.log($scope.idcode);
     $scope.statusDateSta = false; // เปิด-ปิดแสดงวันที่
@@ -75,7 +77,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     console.log($scope.partic.ID_CODE);
     $scope.idcard = $scope.partic.ID_CODE;
     
-    console.log($scope.idcard);
+
     $http.post('php/getData.php',{'type':'typeTrain'}).then(function(data){
         $scope.selTraining = data.data;
     });
@@ -128,7 +130,26 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             $scope.staBtnID = '';
 
         });
-    }*/
+    }*/    
+    $scope.chkdate = function(event,sta,val){
+        //console.log($scope.start_date);
+        var yearCurrent = new Date();
+        var lastnum = val.length;
+       console.log(yearCurrent.getFullYear());
+       console.log(val.substr(2,lastnum));
+        if(event.keyCode != 8){
+            if(val.length == 2 || val.length == 5){
+                var day = val.substr(0,2);
+                if(val.substr(0,2)>31){
+                    day = parseInt('31')+val.substr(2,lastnum);
+                }
+                if(sta=='start'){
+                    $scope.start_date = val+'-';
+                }
+            }
+        }
+        
+    }
     $scope.statusStartDate = function(){
         $scope.statusDateSta =  true;
     }
@@ -199,7 +220,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
         $scope.staFile = chkSendData($scope.fileup);
         $scope.staPartic = chkSendData($scope.partic);
         //$scope.training_num = $scope.showtrainingnum;
-        if($scope.stChkEyear !== 'is-invalid'){
+        /*if($scope.stChkEyear !== 'is-invalid'){
             if($scope.stChkEPart !== 'is-invalid'){
                 if($scope.stChktriCode !== 'is-invalid'){
                     if($scope.stChkTo !== 'is-invalid'){
@@ -211,11 +232,23 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                             if($scope.stChkFund !== 'is-invalid'){
                                                 if($scope.stNumHour !== 'is-invalid'){
                                                     if($scope.staFile !== 'is-invalid'){
-                                                        if($scope.staPartic !== 'is-invalid'){
+                                                        if($scope.staPartic !== 'is-invalid'){*/
                                                             if($scope.fileup.type == 'application/pdf' || $scope.fileup.name != ''){
                                                                 $scope.msgFile ='';
                                                                 $scope.showAlertMsg = false;
                                                                 // check ข้อมูลครบหมด
+                                                                $uibModal.open({
+                                                                    animation: true,
+                                                                    templateUrl:'modalAdd.html',
+                                                                    controller:'modalCtrlInsert',
+                                                                    backdrop:'static',
+                                                                    size:'lg',
+                                                                    resolve:{
+                                                                        userDetail : function(){
+                                                                            return [user,sect];
+                                                                        }
+                                                                    }
+                                                                });
                                                                 var formAdd = new FormData();
                                                                 formAdd.append('id',$scope.ID);
                                                                 formAdd.append('training_num',$scope.showtrainingnum);
@@ -245,15 +278,16 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                 })
                                                                 .then(function(data){
                                                                     console.log(data.data);
-                                                                    if(data.data == 1){
+                                                                    if(data.data == '1'){
                                                                         $scope.staDetailLoading = false; 
+                                                                        
                                                                     }
                                                                 });
                                                             }else{
                                                                 $scope.msgFile = 'กรุณาอัพโหลดไฟล์ที่เป็นนามสกุล PDF เท่านั้น';
                                                                 $scope.staFile = 'is-invalid';
                                                             }
-                                                        }    
+                                                  /*      }    
                                                     } 
                                                 }
                                             }
@@ -267,7 +301,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
             }
         }else{
             $scope.showAlertMsg = true;
-        }
+        }*/
                          
     }
 

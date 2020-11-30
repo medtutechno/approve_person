@@ -5,7 +5,7 @@
     }
     require '../../../php/connect.php';
     $data = json_decode(file_get_contents("php://input"));
-    $con=connect('192.168.66.67','root','medadmin','personal','utf8');
+    $con=connect('192.168.66.1','root','medadmin','personal','utf8');
     $type = $data->type;
     $Eyear = $data->Eyear;
     $trai_code = $data->training_code;
@@ -14,6 +14,11 @@
     $typefund = $data->datafund;
     $name = $data->name;
     if($type == 'idcode'){
+        $sql = 'SELECT * FROM head_department WHERE id_code = "'.$_SESSION['_IDCARD'].'"';
+        $head_dep = select($sql);
+        if($head_dep[0][hold_position]=='1'){
+            $_SESSION['head_section'] = $head_dep[0][section_code];
+        }
         $sql = 'SELECT CONCAT(TFNAME," ",TLNAME)AS fullname,ID_CODE FROM appm_personnel WHERE ID_CODE = "'.$_SESSION['_IDCARD'].'"';
     }else if($type == 'typeTrain'){
         $sql = 'SELECT training_code,detail_training FROM type_training';   
@@ -37,7 +42,6 @@
     }else if($type == 'genID'){
         $sql = 'SELECT MAX(training_num) as lastId FROM training_all WHERE training_num LIKE "nc%" LIMIT 0,1';
     }else if($type == 'cfData'){
-        
         $sql = 'SELECT * FROM personal.training_all
         LEFT JOIN personal.type_training ON personal.type_training.training_code = personal.training_all.training_code
         LEFT JOIN personal.type_present ON personal.type_present.lv_present = personal.training_all.lv_present
@@ -52,12 +56,31 @@
         FROM personal.appm_personnel AS pa
         WHERE pa.ID_CODE <> " " AND CONCAT(pa.TFNAME," ",pa.TLNAME) LIKE "%'.$name.'%"';
     }else if($type == 'status_training'){
-        if($_SESSION['status_system']=='admin'){
-            $condition = '';
+        if(isset($_SESSION['head_section'])){
+            $sql = 'SELECT cancel_status
+            FROM training_all
+            JOIN author_trjoin
+            ON training_all.ID = author_trjoin.join_record
+            LEFT JOIN appm_personnel
+            ON appm_personnel.ID_CODE = author_trjoin.join_research
+            WHERE cancel_status <> "1" AND appm_personnel.SECTION_CODE = "'.$_SESSION['head_section'].'"';
+        }else if($_SESSION['status_system'] == 'admin'){
+            $sql ='SELECT cancel_status
+            FROM training_all
+            WHERE cancel_status <> "1"';
         }
-        $sql ='SELECT cancel_status
-        FROM training_all
-        WHERE cancel_status <> "1"';
+    }else if($type == 'getdata'){
+        if($_SESSION['status_system']=='admin'){
+            $where = ' ';
+        }else if($_SESSION['status_system']=='user'){
+            $where ="WHERE a_tr.join_research = '".$_SESSION['_IDCARD']."'";
+        }
+        $sql = "SELECT t_all.training_num,t_all.present_name,t_all.institute_name,t_all.start_date,t_all.ID,
+            t_all.end_date,t_all.cancel_status
+            FROM training_all AS t_all 
+            JOIN author_trjoin AS a_tr
+            ON t_all.ID = a_tr.join_record
+            ".$where." ORDER BY ID DESC LIMIT 100";
     }
     if($type == 'premission'){
         $con->close();
@@ -71,11 +94,11 @@
         }else{
             $_SESSION['status_system'] = 'user';
         }
-        $sql = 'SELECT * FROM head_department WHERE id_code = "'.$_SESSION['_IDCARD'].'"';
+        /*$sql = 'SELECT * FROM head_department WHERE id_code = "'.$_SESSION['_IDCARD'].'"';
         $head_dep = select($sql);
         if($head_dep[0][hold_position]=='1'){
             $_SESSION['head_section'] = $head_dep[0][section_code];
-        }
+        }*/
     }else{
         $result = select($sql);
     }

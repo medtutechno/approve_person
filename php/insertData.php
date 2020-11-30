@@ -112,7 +112,7 @@
         'date_recode' => date('Y-m-d'), 
         'lecturer_hour'=>$lecturer_hour
     );
-    /*if(empty($id)){
+    if(empty($id)){
         insert('training_all',$value);
     }else{
         $where = 'ID = "'.$id.'"';
@@ -122,13 +122,17 @@
     $result = select($sql);
 
     foreach($partic as $key=>$value){
-        echo $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
+        $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
         if($con->query($sql)){ 
-            echo $value;
+            //echo $value;
+            return true;
+            $chkerr='1';
         }
 	    else{ 
-            die("SQL Error: <br>".$sql."<br>".$con->error); return false; 
+            die("SQL Error: <br>".$sql."<br>".$con->error); 
+            $chkerr= '0';
+            return false; 
         }
-    }*/
-    //echo json_encode($value);
+    }
+    echo $chkerr;
 ?>

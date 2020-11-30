@@ -35,18 +35,33 @@
             $signin = mysqli_query($this->dbcon, "SELECT * FROM tb_user WHERE username = '$uname' AND password = '$password'");
             return $signin;
         }
-        public function fetch_data(){
-            if($_SESSION['status_system']=='admin'){
+        public function fetch_data($val){
+            echo $val;
+            if($_SESSION['status_system']=='admin' || $val == 'all'){
                 $where = ' ';
-            }else if($_SESSION['status_system']=='user'){
+            }else if($_SESSION['status_system']=='user' || $val == 'priv'){
                 $where ="WHERE a_tr.join_research = '".$_SESSION['_IDCARD']."'";
             }
-            $fetch = mysqli_query($this->dbcon, "SELECT t_all.training_num,t_all.present_name,t_all.institute_name,t_all.start_date,t_all.ID,
-            t_all.end_date,t_all.cancel_status
-            FROM training_all AS t_all 
-            JOIN author_trjoin AS a_tr
-            ON t_all.ID = a_tr.join_record
-            ".$where." ORDER BY ID DESC LIMIT 100");
+            if(isset($_SESSION['head_section'])){
+                $sql ='SELECT t_all.training_num,t_all.present_name,t_all.institute_name,t_all.start_date,t_all.ID,
+                t_all.end_date,t_all.cancel_status
+                    FROM training_all AS t_all
+                    JOIN author_trjoin AS a_tr
+                    ON t_all.ID = a_tr.join_record
+                    LEFT JOIN appm_personnel
+                    ON appm_personnel.ID_CODE = a_tr.join_research
+                    WHERE cancel_status <> "1" AND appm_personnel.SECTION_CODE = "'.$_SESSION['head_section'].'"
+                    ORDER BY ID DESC LIMIT 100';
+                $fetch = mysqli_query($this->dbcon, $sql);    
+
+            }else{
+                $fetch = mysqli_query($this->dbcon, "SELECT t_all.training_num,t_all.present_name,t_all.institute_name,t_all.start_date,t_all.ID,
+                t_all.end_date,t_all.cancel_status
+                FROM training_all AS t_all 
+                JOIN author_trjoin AS a_tr
+                ON t_all.ID = a_tr.join_record
+                ".$where." ORDER BY ID DESC LIMIT 100");
+            }
             return $fetch;
         }
         public function select($training_num){

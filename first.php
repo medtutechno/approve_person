@@ -6,11 +6,11 @@
     require_once('function.php');
     include "modal/view_modal.php";
 
-
-  $data = new DB_con();
+    $sta = $_GET['sta'];
+    $data = new DB_con();
 
   // FETCH DATA SHOW
-  $sql = $data->fetch_data();
+  $sql = $data->fetch_data($sta);
   $num = mysqli_num_rows($sql);
     
 ?>
@@ -28,7 +28,7 @@
 
 <body>  
 <?
-if($_SESSION['status_system']=='admin'){
+if($_SESSION['status_system']=='admin' || isset($_SESSION['head_section'])){
 ?>
     <div class='row'>
         <div class='col-md-4 mt-3'>
@@ -57,7 +57,11 @@ if($_SESSION['status_system']=='admin'){
             </div>
         </div>
     </div>
-    <div class='row'>
+    <nav class='nav'>
+            <a class='nav-link' href='../approve_person/?system=196&sta=all' id='all'>ทั้งหมด</a>
+            <a class='nav-link' href='../approve_person/?system=196&sta=priv' id='priv'>ส่วนตัว</a>
+    </nav>
+    <!--<div class='row'>
         <div class='col-md-4 mt-3'>
                     <form class='form-inline'>
                         <select class='form-control form-control-sm rounded-0'>
@@ -71,8 +75,9 @@ if($_SESSION['status_system']=='admin'){
                     </form>
 
         </div>
-    </div>
-<?}?>
+    </div>-->
+<?
+}?>
         <hr>
         <table class="table table-bordered border mt-3" id="table_show">
             <thead class="table-secondary">
@@ -97,23 +102,27 @@ if($_SESSION['status_system']=='admin'){
                     <td><?= date('d-m-Y',strtotime($row['start_date']))." ถึง ".date('d-m-Y',strtotime($row['end_date']));?>
                     </td>
                     <td width="100px">
-                        <?if($row['cancel_status'] == 0){?>
-                        <input type="button" value="รอตรวจสอบ" name="cancel_status"
-                            class="btn btn-sm btn-block btn-warning" disabled />
-                        <?}else if ($row['cancel_status'] == 1){?>
-                        <input type="button" value="อนุมัติ" name="cancel_status"
-                            class="btn btn-sm btn-block btn-success" disabled />
-                        <?}else if ($row['cancel_status'] == 2){?>
-                        <input type="button" value="ยกเลิก" name="cancel_status" class="btn btn-sm btn-block btn-danger"
-                            disabled />
-                        <?}else{
-                                ?>
-                        <input type="button" value="ไม่อนุมัติ" name="cancel_status"
-                            class="btn btn-sm btn-block btn-danger" disabled />
+                        <?switch($row['cancel_status']){
+                            case '0':
+                        ?>
+                                <button type="button" class="btn btn-sm btn-block btn-warning rounded-0" disabled >รอการอนุมัติ</button>
+                        <?
+                            break;
+                            case '1':  
+                        ?>
+                                <button type="button" class="btn btn-sm btn-block btn-success rounded-0" disabled >อนุมัติ</button>
+                        <?  break;
+                            case '2' :
+                        ?>
+                            <button type="button" class="btn btn-sm btn-block btn-danger rounded-0" disabled>ยกเลิก</button>
+                        <?break;
+                            default:        
+                        ?>
+                            <button type="button" class="btn btn-sm btn-block btn-danger rounded-0" disabled>ไม่อนุมัติ</button>
                         <?}?>
                     </td>
                     <td width="150px" class="text-center">
-                        <button class="btn btn-primary btn-sm view_details" data-toggle="modal"
+                        <button class="btn btn-primary btn-sm view_details rounded-0" data-toggle="modal"
                             data-target="#details_event" id="<?= $row['ID'];?>"><i class=" fa fa-list"
                                 aria-hidden="true" name="btn_view"></i>
                             รายละเอียด</button>

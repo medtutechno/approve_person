@@ -1,8 +1,5 @@
 <?
     session_start();
-    echo $_SESSION['_IDCARD'];
-    echo $_SESSION['_LOGIN'];
-	echo $_SESSION['_USER'];
 
 ?>
 <div class='container mt-3 mb-3'>
@@ -71,24 +68,16 @@
             <div class='col-md-2 p-1'>
                 <label>วันที่เริ่มต้น</label>
                 <div class='input-group'>
-                    <input type='text' class='form-control' placeholder='วันที่เริ่มต้น' ng-model='start_date' uib-datepicker-popup='dd-MMMM-yyyy' is-open='statusDateSta' style='border-radius:0;'>
-                    <span class='input-group-btn'>
-                        <button type='button' class='btn btn-outline-info' style='border-radius:0' ng-click='statusStartDate()'>
-                            <i class="fas fa-calendar-alt"></i>
-                        </button>
-                    </span>
+                    <input type='text' class='form-control rounded-0' placeholder='วัน-เดือน-ปี' ng-model='start_date' ng-keydown='chkdate($event,"start",start_date)'>                
                 </div>
+                <small class='text-danger'>ตัวอย่าง 31-12-2020</small>
             </div>
             <div class='col-md-2 p-1'>
                 <label>วันที่สิ้นสุด</label>
                 <div class='input-group'>
-                    <input type='text' class='form-control' placeholder='วันที่สิ้นสุด' ng-model='end_date' uib-datepicker-popup='dd-MMMM-yyyy' is-open='statusDateEnd' style='border-radius:0;'>
-                    <span class='input-group-btn'>
-                        <button type='button' class='btn btn-outline-info' style='border-radius:0' ng-click='statusEndDate()'>
-                            <i class="fas fa-calendar-alt"></i>
-                        </button>
-                    </span>
+                    <input type='text' class='form-control rounded-0' placeholder='วัน-เดือน-ปี' ng-model='end_date'>
                 </div>
+                <small class='text-danger'>ตัวอย่าง 31-12-2020</small>
             </div>
             <div class='col-md-2 p-1'>
                 <label>วันที่อบรม</label>
