@@ -18,6 +18,7 @@ app.config(function($routeProvider,$locationProvider){
 });
 app.service('datauser',function(){
     this.fullname = '';
+    this.idcode = '';
 });
 app.service('autoComplete',function(){
     this.autoCom = function(val){

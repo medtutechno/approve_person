@@ -1,7 +1,8 @@
 app.controller('menuPage',function($scope,$http,datauser){
     $http.post('php/getData.php',{'type':'idcode'}).then(function(data){
         datauser.fullname = data.data[0].fullname;
-        $scope.fullname = data.data[0].fullname;
+        datauser.idcode = data.data[0].ID_CODE;
+        $scope.fullname = datauser.fullname;
     });
     $http.post('php/getData.php',{'type':'premission'}).then(function(data){});
     $http.post('php/getData.php',{'type':'getdata'}).then(function(data){
@@ -53,11 +54,11 @@ app.controller('modalCtrlInsert',function($uibModalInstance,$scope,$http,userDet
     }
 });
 //=============================== Controller addPage.php ===============================
-app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
+app.controller('addPage',function($scope,$http,$uibModal,autoComplete,datauser){
     //$scope.start_date = new Date();
     //$scope.end_date = new Date();
     //$scope.active_date = new Date();
-    console.log($scope.idcode);
+    $scope.idcode = datauser.idcode;
     $scope.statusDateSta = false; // เปิด-ปิดแสดงวันที่
     $scope.statusDateEnd = false;
     $scope.statusDateActive =  false;
@@ -161,13 +162,14 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
         $scope.statusDateActive = true;
     }     
     $scope.userIns = function(){
+        console.log($scope.staUserIns);
         if($scope.staUserIns){
             $scope.msgUserIns = 'เข้าร่วม';
             userIn();
             //$scope.partic.push($scope.dataPartic[0]);
         }else{
             $scope.msgUserIns = 'ไม่เข้าร่วม';
-            delPerson();
+            delPerson(datauser.idcode);
             /*angular.forEach($scope.partic,function(value,key){
                 if(value.ID_CODE == ){
                     $scope.partic.splice(key,1);
@@ -207,10 +209,11 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
     $scope.btnAddData = function(){
         //========================== Check Data    ============================
         var chkAns = 0;
+        console.log($scope.partic);
        /* $scope.stChkEyear = chkSendData($scope.Eyear);  
-        $scope.stChkEPart = chkSendData($scope.EPart);
+        $scope.stChkEPart = chkSendData($scope.EPart);*/
         $scope.stChktriCode = chkSendData($scope.training_code); 
-        $scope.stChkTo = chkSendData($scope.institute_name);
+        /*$scope.stChkTo = chkSendData($scope.institute_name);
         $scope.stChkPrename = chkSendData($scope.present_name);
         $scope.stChkSubj = chkSendData($scope.edu_institute);
         $scope.stChkShowInsti = chkSendData($scope.type_work_code);
@@ -219,12 +222,12 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
         $scope.stChkFund = chkSendData($scope.sch_name);
         $scope.stNumHour = chkSendData($scope.lecturer_hour);*/
         $scope.staFile = chkSendData($scope.fileup);
-        //$scope.staPartic = chkSendData($scope.partic);
+        $scope.staPartic = chkSendData($scope.partic);
         //$scope.training_num = $scope.showtrainingnum;
         /*if($scope.stChkEyear !== 'is-invalid'){
-            if($scope.stChkEPart !== 'is-invalid'){
+            if($scope.stChkEPart !== 'is-invalid'){*/
                 if($scope.stChktriCode !== 'is-invalid'){
-                    if($scope.stChkTo !== 'is-invalid'){
+            /*        if($scope.stChkTo !== 'is-invalid'){
                         if($scope.stChkPrename !== 'is-invalid'){
                             if($scope.stChkSubj !== 'is-invalid'){
                                 if($scope.stChkShowInsti !== 'is-invalid'){
@@ -232,9 +235,10 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                         if($scope.stChkActDate !== 'is-invalid'){
                                             if($scope.stChkFund !== 'is-invalid'){
                                                 if($scope.stNumHour !== 'is-invalid'){
-                                                    if($scope.staFile !== 'is-invalid'){
-                                                        if($scope.staPartic !== 'is-invalid'){*/
-                                                            if($scope.fileup.type == 'application/pdf' || $scope.fileup.name != ''){
+                                                    if($scope.staFile !== 'is-invalid'){*/
+                                                    if($scope.staPartic !== 'is-invalid'){
+                                                        if($scope.fileup != undefined){    
+                                                            if($scope.fileup.name != '' || $scope.fileup.type == 'application/pdf'){
                                                                 $scope.msgFile ='';
                                                                 $scope.showAlertMsg = false;
                                                                 // check ข้อมูลครบหมด
@@ -279,7 +283,7 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                     templateUrl:'modalLoadSaveData.html',
                                                                     controller:'modalCtrlSaveData',
                                                                     backdrop:'static',
-                                                                    size:'lg',
+                                                                    size:'sm',
                                                                     resolve:{
                                                                         alldata : function(){
                                                                             return formAdd;
@@ -288,11 +292,15 @@ app.controller('addPage',function($scope,$http,$uibModal,autoComplete){
                                                                 });
                                                             }else{
                                                                 $scope.msgFile = 'กรุณาอัพโหลดไฟล์ที่เป็นนามสกุล PDF เท่านั้น';
-                                                                $scope.staFile = 'is-invalid';
+                                                                $scope.staFile = 'is-invalid';  
                                                             }
-                                                  /*      }    
-                                                    } 
-                                                }
+                                                        }else{
+                                                            $scope.msgFile = 'กรุณาอัพโหลดไฟล์';
+                                                            $scope.staFile = 'is-invalid'; 
+                                                        }
+                                                    }   
+                                                } 
+                                               /* }
                                             }
                                         }
                                     }
@@ -531,7 +539,10 @@ app.controller('modalCtrlSaveData',function($uibModalInstance,$scope,alldata,$ht
     $scope.staDetailLoading = true;
     //console.log(alldata); 
     //console.log(alldata[0].fileup);
-    $http.post('php/insertData.php',alldata)
+    $http.post('php/insertData.php',alldata,{
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined}
+    })
     .then(function(data){
         console.log(data.data);
         if(data.data == 1){

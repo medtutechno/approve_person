@@ -6,9 +6,9 @@
     require '../../../php/connect.php';
     $con = connect('192.168.66.67','root','medadmin','personal','utf8');
     
-    $data = json_decode(file_get_contents("php://input"));
+    //$data = json_decode(file_get_contents("php://input"));
 
-    $training_num = $_POST['training_num'];
+    echo $training_num;
     $id = $_POST['id'];
     $training_code = $_POST['training_code'];
     $Eyear = $_POST['Eyear'];
@@ -27,6 +27,7 @@
     $comment = $_POST['comment'];
     $attach_join = $_POST['attach_join'];
     $tmp_file = $_FILES['file']['tmp_name'];
+    $partic = $_POST['partic'];
     $path ='attach_file/';
     function genID(){
         $sql = 'SELECT MAX(training_num) as lastId FROM training_all WHERE training_num LIKE "nc%" LIMIT 0,1';
@@ -120,7 +121,6 @@
     }
     $sql = 'SELECT ID FROM training_all WHERE training_num ="'.$training_num.'"';
     $result = select($sql);
-echo $partic;
     foreach($partic as $key=>$value){
         $sql = 'INSERT INTO author_trjoin (join_record,join_research,join_Gtrain,sec_join) VALUES ("'.$result[0][ID].'","'.$value.'","'.$Gtraining_code.'","0")';
         if($con->query($sql)){ 
